@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import CounterControl from '../../components/CounterControl/CounterControl';
 import CounterOutput from '../../components/CounterOutput/CounterOutput';
+import { connect } from 'react-redux';   // connect is a fn that returns hoc
 
 class Counter extends Component {
   state = {
@@ -21,13 +22,15 @@ class Counter extends Component {
       case 'sub':
         this.setState( ( prevState ) => { return { counter: prevState.counter - value } } )
         break;
+      default:
+        console.log('hello');
     }
   }
 
   render () {
     return (
       <div>
-        <CounterOutput value={this.state.counter} />
+        <CounterOutput value={this.props.ctr} />
         <CounterControl label="Increment" clicked={() => this.counterChangedHandler( 'inc' )} />
         <CounterControl label="Decrement" clicked={() => this.counterChangedHandler( 'dec' )}  />
         <CounterControl label="Add 5" clicked={() => this.counterChangedHandler( 'add', 5 )}  />
@@ -37,4 +40,10 @@ class Counter extends Component {
   }
 }
 
-export default Counter;
+const mapStateToProp = state => {
+  return {
+    ctr: state.counter
+  };
+}
+
+export default connect(mapStateToProp)(Counter);
