@@ -1,43 +1,28 @@
-const initialState = {
-  counter: 0,
-  results: []
-}
+import * as actionTypes from './actions';
 
-const reducer = (state = initialState, action) => {
-  switch (action.type) {
-    case 'INCREMENT':
-      return {
-        ...state,
-        counter: state.counter + 1
-      }
-    case 'DECREMENT':
-      return {
-        ...state,   // distribute props?
-        counter: state.counter - 1
-      }
-    case 'ADD':
-      return {
-        ...state,
-        counter: state.counter + action.val
-      }
-    case 'SUBTRACT':
-    return {
-      ...state,
-      counter: state.counter - action.val
+const initialState = {
+    persons: []
+};
+
+const reducer = ( state = initialState, action ) => {
+    switch ( action.type ) {
+      case actionTypes.ADD_PERSON:
+        const newPerson = {
+          id: Math.random(), // not really unique but good enough here!
+          name: action.personData.name,
+          age: action.personData.age
+        }
+        return {
+          ...state,
+          persons: state.persons.concat( newPerson )
+        }
+      case actionTypes.REMOVE_PERSON:
+        return {
+          ...state,
+          persons: state.persons.filter(person => person.id !== action.personId)
+         }
     }
-    case 'STORE_RESULT':
-      return {
-        ...state,
-        results: state.results.concat({id: new Date(), value: state.counter})   // concat creates new array?
-      }
-    case 'DELETE_RESULT':
-      const updatedArray = state.results.filter(result => result.id !== action.resultELId);
-      return {
-        ...state,
-        results: updatedArray
-      }
-  }
-  return state;
-}
+    return state;
+};
 
 export default reducer;
